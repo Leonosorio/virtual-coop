@@ -4,12 +4,27 @@ class PaymentsController < ApplicationController
 
   # GET /payments
   def index
+    @clients = Client.order(:first_name, :last_name)
+
+    @payments = Payment.includes(:payment_type, :client).order(created_at: :desc)
+
     if params[:client_id].present?
-      @client = Client.find(params[:client_id])
-      @payments = @client.payments.includes(:payment_type, :client).order(created_at: :desc)
-    else
-      @payments = Payment.includes(:payment_type, :client).order(created_at: :desc)
+      @client = Client.find_by(id: params[:client_id])
+      @payments = @payments.where(client_id: params[:client_id]) if @client.present?
     end
+
+    if params[:payment_kind].present?
+      case params[:payment_kind]
+      when "credito"
+        @payments = @payments.joins(:payment_type)
+                             .where("LOWER(payment_types.name) IN (?)", ["crédito", "credito"])
+      when "debito"
+        @payments = @payments.joins(:payment_type)
+                             .where.not("LOWER(payment_types.name) IN (?)", ["crédito", "credito"])
+      end
+    end
+
+    calculate_payment_stats
   end
 
   # GET /payments/1
@@ -129,5 +144,19 @@ class PaymentsController < ApplicationController
   def blocked_client_selected?(client_id)
     client = Client.find_by(id: client_id)
     client.present? && client.status == false
+  end
+
+  def calculate_payment_stats
+    payment_records = @payments.to_a
+
+    @total_payments = payment_records.count
+
+    @credit_payments = payment_records.count do |payment|
+      payment.payment_type.name.to_s.downcase.in?(["crédito", "credito"])
+    end
+
+    @debit_payments = @total_payments - @credit_payments
+
+    @visible_movements = @total_payments
   end
 end

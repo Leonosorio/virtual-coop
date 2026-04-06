@@ -1,15 +1,68 @@
-<div class="form-card">
-  <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="form-container fade-in-up">
+
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
     <div>
-      <h2 class="mb-1">Registrar pago</h2>
-      <p class="text-muted mb-0">Ingrese la información del movimiento financiero</p>
+      <h1 class="page-title mb-1">Registrar pago</h1>
+      <p class="page-subtitle mb-0">Ingrese la información del movimiento financiero</p>
     </div>
 
-    <%= link_to payments_path, class: "btn btn-outline-secondary" do %>
-      <i class="bi bi-arrow-left me-1"></i>
-      Volver
+    <%= link_to payments_path, class: "btn btn-outline-secondary shadow-sm" do %>
+      ← Volver
     <% end %>
   </div>
 
-  <%= render "form", payment: @payment %>
+  <div class="form-card">
+    <%= form_with model: @payment, local: true do |f| %>
+
+      <div class="row g-4">
+
+        <!-- Cliente -->
+        <div class="col-md-6">
+          <%= f.label :client_id, "Cliente", class: "form-label fw-semibold" %>
+          <%= f.collection_select :client_id, @clients, :id, :full_name,
+                { prompt: "Seleccione un cliente" },
+                { class: "form-select modern-input" } %>
+        </div>
+
+        <!-- Tipo -->
+        <div class="col-md-6">
+          <%= f.label :payment_type_id, "Tipo de pago", class: "form-label fw-semibold" %>
+          <%= f.collection_select :payment_type_id, @payment_types, :id, :name,
+                { prompt: "Seleccione un tipo de pago" },
+                { class: "form-select modern-input" } %>
+        </div>
+
+        <!-- Valor -->
+        <div class="col-md-6">
+          <%= f.label :amount, "Valor", class: "form-label fw-semibold" %>
+          <%= f.number_field :amount,
+                step: "0.01",
+                class: "form-control modern-input",
+                placeholder: "Ej: 150000" %>
+
+          <small class="text-muted">Ingrese un valor numérico válido</small>
+        </div>
+
+        <!-- Descripción -->
+        <div class="col-md-12">
+          <%= f.label :description, "Descripción", class: "form-label fw-semibold" %>
+          <%= f.text_area :description,
+                rows: 3,
+                class: "form-control modern-input",
+                placeholder: "Descripción opcional del movimiento" %>
+        </div>
+
+      </div>
+
+      <!-- Botones -->
+      <div class="d-flex justify-content-end gap-3 mt-4 flex-wrap">
+
+        <%= link_to "Cancelar", payments_path, class: "btn btn-light border px-4" %>
+
+        <%= f.submit "Registrar pago", class: "btn btn-primary px-4 shadow-sm" %>
+
+      </div>
+
+    <% end %>
+  </div>
 </div>
