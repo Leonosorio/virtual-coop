@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  amount: 9.99
+  description: MyText
+  client: one
+  payment_type: one
+
+two:
+  amount: 9.99
+  description: MyText
+  client: two
+  payment_type: two

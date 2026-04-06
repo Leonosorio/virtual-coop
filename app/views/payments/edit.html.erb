@@ -1,0 +1,15 @@
+<div class="form-card">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">Editar pago</h2>
+      <p class="text-muted mb-0">Modifique la información del pago seleccionado</p>
+    </div>
+
+    <%= link_to payments_path, class: "btn btn-outline-secondary" do %>
+      <i class="bi bi-arrow-left me-1"></i>
+      Volver
+    <% end %>
+  </div>
+
+  <%= render "form", payment: @payment %>
+</div>

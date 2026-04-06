@@ -1,0 +1,62 @@
+<%= form_with(model: payment, local: true) do |form| %>
+  <% if payment.errors.any? %>
+    <div class="alert alert-danger shadow-sm rounded-4 mb-4">
+      <h5 class="mb-3">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <%= pluralize(payment.errors.count, "error") %> impidieron guardar este pago:
+      </h5>
+      <ul class="mb-0">
+        <% payment.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :client_id, "Cliente", class: "form-label fw-semibold" %>
+    <%= form.collection_select :client_id,
+                               @clients,
+                               :id,
+                               :full_name,
+                               { prompt: "Seleccione un cliente" },
+                               { class: "form-select form-control" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :payment_type_id, "Tipo de pago", class: "form-label fw-semibold" %>
+    <%= form.collection_select :payment_type_id,
+                               @payment_types,
+                               :id,
+                               :name,
+                               { prompt: "Seleccione un tipo de pago" },
+                               { class: "form-select form-control" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :amount, "Valor", class: "form-label fw-semibold" %>
+    <%= form.number_field :amount,
+                          step: 0.01,
+                          min: 1,
+                          class: "form-control",
+                          placeholder: "Ingrese el valor del pago" %>
+    <div class="form-text">
+      Ingrese un valor numérico con formato decimal si es necesario.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, "Descripción", class: "form-label fw-semibold" %>
+    <%= form.text_area :description,
+                       class: "form-control",
+                       rows: 4,
+                       placeholder: "Descripción opcional del movimiento" %>
+  </div>
+
+  <div class="mt-4 d-flex gap-2 flex-wrap">
+    <%= form.submit payment.persisted? ? "Actualizar pago" : "Registrar pago",
+                    class: "btn btn-primary px-4" %>
+
+    <%= link_to "Volver", payments_path, class: "btn btn-outline-secondary px-4" %>
+  </div>
+<% end %>

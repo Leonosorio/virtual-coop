@@ -1,0 +1,66 @@
+<div class="table-card">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h1 class="mb-1">Lista de pagos</h1>
+      <p class="text-muted mb-0">Consulta y gestión de movimientos financieros</p>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table-modern">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Tipo de pago</th>
+          <th>Número de cuenta</th>
+          <th>Valor</th>
+          <th>Descripción</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @payments.each do |payment| %>
+          <tr>
+            <td><%= payment.client.full_name %></td>
+
+            <td>
+              <% if payment.payment_type.name.downcase == "crédito" || payment.payment_type.name.downcase == "credito" %>
+                <span class="fw-bold text-success"><%= payment.payment_type.name %></span>
+              <% else %>
+                <span class="fw-bold text-danger"><%= payment.payment_type.name %></span>
+              <% end %>
+            </td>
+
+            <td><%= payment.client.account_number %></td>
+
+            <td>
+              <% if payment.payment_type.name.downcase == "crédito" || payment.payment_type.name.downcase == "credito" %>
+                <span class="fw-bold text-success">$<%= number_with_delimiter(payment.amount, delimiter: ".") %></span>
+              <% else %>
+                <span class="fw-bold text-danger">$<%= number_with_delimiter(payment.amount, delimiter: ".") %></span>
+              <% end %>
+            </td>
+
+            <td><%= payment.description.present? ? payment.description : "Sin descripción" %></td>
+            <td><%= payment.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+
+            <td>
+              <div class="d-flex gap-2 flex-wrap">
+                <%= link_to edit_payment_path(payment), class: "btn btn-sm btn-warning" do %>
+                  <i class="bi bi-pencil-square me-1"></i>
+                  Editar
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4 d-flex gap-2 flex-wrap">
+    <%= link_to "Nuevo pago", new_payment_path, class: "btn btn-primary" %>
+    <%= link_to "Exportar a Excel", export_payments_path, class: "btn btn-success" %>
+  </div>
+</div>

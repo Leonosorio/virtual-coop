@@ -1,0 +1,56 @@
+<%= form_with(model: client) do |form| %>
+  <% if client.errors.any? %>
+    <div class="alert alert-danger">
+      <h5><%= pluralize(client.errors.count, "error") %> impidieron guardar este cliente:</h5>
+      <ul class="mb-0">
+        <% client.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :document, "Documento", class: "form-label" %>
+    <%= form.text_field :document, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :document_type_id, "Tipo de documento", class: "form-label" %>
+    <%= form.collection_select :document_type_id, @document_types, :id, :name, { prompt: "Seleccione" }, { class: "form-select" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :first_name, "Nombres", class: "form-label" %>
+    <%= form.text_field :first_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :last_name, "Apellidos", class: "form-label" %>
+    <%= form.text_field :last_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :email, "Correo electrónico", class: "form-label" %>
+    <%= form.email_field :email, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :phone, "Celular", class: "form-label" %>
+    <%= form.text_field :phone, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :account_number, "Número de cuenta", class: "form-label" %>
+    <%= form.text_field :account_number, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :account_type_id, "Tipo de cuenta", class: "form-label" %>
+    <%= form.collection_select :account_type_id, @account_types, :id, :name, { prompt: "Seleccione" }, { class: "form-select" } %>
+  </div>
+
+  <div class="mt-4">
+    <%= form.submit client.persisted? ? "Actualizar cliente" : "Registrar cliente", class: "btn btn-primary" %>
+  </div>
+<% end %>

@@ -1,0 +1,52 @@
+<div class="login-page">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="login-logo-box">
+          <%= image_tag "virtualcoop_logo.png", alt: "VirtualCoop Logo", class: "login-logo" %>
+        </div>
+        <h1>VirtualCoop</h1>
+        <p>Accede a tu panel de gestión financiera</p>
+      </div>
+
+      <% if flash[:alert] %>
+        <div class="alert alert-danger">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
+
+      <% if flash[:notice] %>
+        <div class="alert alert-success">
+          <%= flash[:notice] %>
+        </div>
+      <% end %>
+
+      <%= form_with url: login_path, method: :post, local: true do |form| %>
+        <div class="mb-3">
+          <%= form.label :email, "Correo electrónico", class: "form-label" %>
+          <%= form.email_field :email, class: "form-control login-input", placeholder: "ejemplo@virtualcoop.com" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :password, "Contraseña", class: "form-label" %>
+          <%= form.password_field :password, class: "form-control login-input", placeholder: "••••••••" %>
+        </div>
+
+        <div class="login-options">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">Recordarme</label>
+          </div>
+
+     <span class="login-link disabled-link">Acceso seguro</span>
+        </div>
+
+        <%= form.submit "Iniciar sesión", class: "btn-fintech btn-primary-fintech login-btn" %>
+      <% end %>
+
+      <div class="login-footer">
+        <p>Tu información está protegida con acceso seguro.</p>
+      </div>
+    </div>
+  </div>
+</div>
