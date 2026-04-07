@@ -4,14 +4,16 @@ class ClientsController < ApplicationController
 
   # GET /clients
   def index
-    @clients = Client.includes(:document_type, :account_type)
+  @clients = Client.includes(:document_type, :account_type).order(status: :desc, created_at: :desc)
 
-    if params[:document].present?
-      @clients = @clients.where("document LIKE ?", "%#{params[:document]}%")
-    end
-
-    @clients = @clients.order(status: :desc, created_at: :asc)
+  if params[:document].present?
+    @clients = @clients.where("document_number ILIKE ?", "%#{params[:document]}%")
   end
+
+  @total_clients = Client.count
+  @active_clients = Client.where(status: true).count
+  @blocked_clients = Client.where(status: false).count
+end
 
   # GET /clients/1
   def show
